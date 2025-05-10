@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-br from-gray-900 to-black h-screen flex items-center">
+    <!-- Overlay grid pattern -->
+    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20"></div>
+    <div class="relative container mx-auto px-4 text-center text-white space-y-6">
+      
+      <!-- Community Icon -->
+<div class="mx-auto text-6xl">
+  🌐
+</div>
+
+
+      <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight">
+        Connect • Serve • Thrive
+      </h1>
+      <p class="max-w-2xl mx-auto text-lg text-gray-300">
+        Your gateway to local volunteering—where tech meets community.  
+        Discover, join, and manage opportunities that shape tomorrow.
+      </p>
+
+      <div class="flex justify-center space-x-4">
+        {% if not session.get('user') %}
+          <a href="{{ url_for('login') }}"
+             class="px-8 py-3 bg-blue-500 hover:bg-blue-600 rounded-full font-medium transition">
+            Log In
+          </a>
+        {% else %}
+          <a href="{{ url_for('volunteer_dashboard') }}"
+             class="px-8 py-3 bg-green-500 hover:bg-green-600 rounded-full font-medium transition">
+            My Dashboard
+          </a>
+        {% endif %}
+        <a href="{{ url_for('events') }}"
+           class="px-8 py-3 border border-blue-400 hover:border-blue-500 rounded-full text-blue-400 hover:text-blue-500 font-medium transition">
+          Browse Events
+        </a>
+      </div>
+    </div>
+  </section>
+{% endblock %}

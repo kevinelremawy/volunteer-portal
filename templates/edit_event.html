@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Edit Event</h2>
+  <form method="post">
+    <label>
+      Title:<br>
+      <input name="title" value="{{ event.title }}" required class="border p-1 w-full">
+    </label><br><br>
+
+    <label>
+      Date & Time:<br>
+      <input name="date" type="datetime-local"
+             value="{{ event.date.strftime('%Y-%m-%dT%H:%M') }}"
+             required class="border p-1 w-full">
+    </label><br><br>
+
+    <label>
+      Description:<br>
+      <textarea name="description" class="border p-1 w-full" rows="3">{{ event.description }}</textarea>
+    </label><br><br>
+
+    <label>
+      Category:<br>
+      <select name="category" required class="border p-1 w-full">
+        <option value="Food Drives"    {% if event.category=='Food Drives'    %}selected{% endif %}>Food Drives</option>
+        <option value="Clean-Up"   {% if event.category=='Clean-Up'   %}selected{% endif %}>Clean-Up</option>
+        <option value="Community Help"  {% if event.category=='Community Help'  %}selected{% endif %}>Community Help</option>
+      </select>
+    </label><br><br>
+
+    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded">
+      Save Changes
+    </button>
+    <a href="{{ url_for('admin_dashboard') }}" class="ml-4 underline">Cancel</a>
+  </form>
+{% endblock %}

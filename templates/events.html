@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="bg-gradient-to-br from-gray-800 to-gray-900 py-12 text-white">
+  <div class="container mx-auto px-4 space-y-8">
+
+    <!-- Page Title -->
+    <div class="text-center">
+      <h2 class="text-4xl font-extrabold">Volunteer Opportunities</h2>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="flex justify-center space-x-3">
+      <a href="{{ url_for('events', category='All') }}"
+         class="px-4 py-2 rounded-full font-medium transition
+                {{ 'bg-blue-500 text-white' if selected=='All' else 'bg-gray-700 hover:bg-gray-600' }}">
+        All
+      </a>
+      {% for cat in categories %}
+        <a href="{{ url_for('events', category=cat) }}"
+           class="px-4 py-2 rounded-full font-medium transition
+                  {{ 'bg-blue-500 text-white' if selected==cat else 'bg-gray-700 hover:bg-gray-600' }}">
+          {{ cat }}
+        </a>
+      {% endfor %}
+    </div>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="mx-auto max-w-2xl space-y-2">
+          {% for category, msg in messages %}
+            <div class="px-4 py-2 rounded
+                        {% if category=='success' %}bg-green-100 text-green-800
+                        {% elif category=='warning' %}bg-yellow-100 text-yellow-800
+                        {% else %}bg-blue-100 text-blue-800{% endif %}">
+              {{ msg }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Event List -->
+    {% if events %}
+      <ul class="space-y-6">
+        {% for ev in events %}
+          <li class="bg-gray-800 border border-blue-600 rounded-lg p-6 flex flex-col md:flex-row justify-between">
+            <div class="space-y-2">
+              <h3 class="text-2xl font-semibold">{{ ev.title }}</h3>
+              <p class="text-gray-400 text-sm">
+                {{ ev.date.strftime('%b %d, %Y %I:%M %p') }}
+              </p>
+              <p class="italic text-blue-300">{{ ev.category }}</p>
+              <p class="text-gray-300">{{ ev.description }}</p>
+            </div>
+            <div class="mt-4 md:mt-0 flex items-center">
+              {% if session.get('user') %}
+                <form action="{{ url_for('signup', event_id=ev.id) }}" method="post">
+                  <button class="px-5 py-2 bg-green-500 hover:bg-green-600 rounded-full font-medium transition">
+                    Sign Up
+                  </button>
+                </form>
+              {% else %}
+                <a href="{{ url_for('login') }}"
+                   class="px-5 py-2 bg-blue-500 hover:bg-blue-600 rounded-full font-medium transition">
+                  Log in to Sign Up
+                </a>
+              {% endif %}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-center text-gray-400">(no events in this category)</p>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block content %}
+  <section class="bg-gradient-to-br from-gray-800 to-gray-900 py-12">
+    <div class="container mx-auto px-4 text-white space-y-12">
+
+      <!-- Hero header -->
+      <div class="text-center space-y-2">
+        <h2 class="text-4xl font-extrabold">Welcome, {{ user.name }}!</h2>
+        <p class="text-gray-400">Your volunteer hub</p>
+        <a href="{{ url_for('profile') }}"
+           class="inline-block mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-full font-medium">
+          ✏️ Edit Profile
+        </a>
+      </div>
+
+      <!-- Your Info & Contact Preferences -->
+      <div class="max-w-2xl mx-auto grid md:grid-cols-2 gap-8">
+        <!-- Info -->
+        <div class="bg-gray-800 border border-blue-600 rounded-lg p-6 space-y-2">
+          <h3 class="text-2xl font-semibold">Your Info</h3>
+          <p><span class="font-medium">Email:</span> {{ user.email }}</p>
+          <p><span class="font-medium">Phone:</span> {{ user.phone or '(not set)' }}</p>
+        </div>
+        <!-- Contact Prefs -->
+        <div class="bg-gray-800 border border-blue-600 rounded-lg p-6">
+          <h3 class="text-2xl font-semibold mb-4">Contact Preferences</h3>
+          <form action="{{ url_for('preferences') }}" method="post" class="space-y-4">
+            <label class="flex items-center space-x-2">
+              <input type="checkbox" name="pref_email"
+                     {% if session.get('pref_email') %}checked{% endif %}
+                     class="form-checkbox h-5 w-5 text-blue-400">
+              <span>Email notifications</span>
+            </label>
+            <label class="flex items-center space-x-2">
+              <input type="checkbox" name="pref_sms"
+                     {% if session.get('pref_sms') %}checked{% endif %}
+                     class="form-checkbox h-5 w-5 text-blue-400">
+              <span>SMS notifications</span>
+            </label>
+            <button type="submit"
+                    class="mt-2 px-4 py-2 bg-green-500 hover:bg-green-400 rounded-full font-medium">
+              Save Preferences
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Your Sign-Ups -->
+      <div class="max-w-2xl mx-auto">
+        <h3 class="text-2xl font-semibold text-white mb-4">Your Sign-Ups</h3>
+        {% if signups %}
+          <ul class="space-y-4">
+            {% for s in signups %}
+              <li class="bg-gray-800 border border-blue-600 rounded-lg p-4 flex justify-between items-center">
+                <div>
+                  <p class="font-medium">{{ s.event_title }}</p>
+                  <p class="text-gray-400 text-sm">
+                    {{ s.event_date.strftime('%b %d, %Y %I:%M %p') }}
+                  </p>
+                </div>
+                <form action="{{ url_for('cancel', event_id=s.event_id) }}" method="post">
+                  <button class="px-3 py-1 bg-red-500 hover:bg-red-600 rounded-full text-sm">
+                    Cancel
+                  </button>
+                </form>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-gray-400">(You haven’t signed up for anything yet.)</p>
+        {% endif %}
+      </div>
+
+      <!-- Upcoming Events teaser -->
+      <div class="max-w-2xl mx-auto">
+        <h3 class="text-2xl font-semibold text-white mb-4">Upcoming Events</h3>
+        {% if events %}
+          <ul class="space-y-4">
+            {% for ev in events %}
+              <li class="bg-gray-800 border border-blue-600 rounded-lg p-4 flex justify-between items-start">
+                <div>
+                  <p class="font-bold">{{ ev.title }}</p>
+                  <p class="text-gray-400 text-sm">
+                    {{ ev.date.strftime('%b %d, %Y %I:%M %p') }}
+                  </p>
+                  <p class="text-gray-300 mt-1">{{ ev.description }}</p>
+                </div>
+                <a href="{{ url_for('events') }}"
+                   class="px-3 py-1 border border-blue-400 hover:bg-blue-500 hover:text-white rounded-full text-sm">
+                  Browse
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-gray-400">(no upcoming events)</p>
+        {% endif %}
+      </div>
+
+    </div>
+  </section>
+{% endblock %}

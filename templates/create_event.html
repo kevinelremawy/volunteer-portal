@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Create New Event</h2>
+  <form method="post">
+    <label>
+      Title:<br>
+      <input name="title" required class="border p-1 w-full">
+    </label><br><br>
+
+    <label>
+      Date & Time:<br>
+      <input name="date" type="datetime-local" required class="border p-1 w-full">
+    </label><br><br>
+
+    <label>
+      Description:<br>
+      <textarea name="description" class="border p-1 w-full" rows="3"></textarea>
+    </label><br><br>
+
+    <label>
+      Category:<br>
+      <select name="category" required class="border p-1 w-full">
+        <option value="Food Drives">Food Drives</option>
+        <option value="Park Clean-Up">Park Clean-Up</option>
+        <option value="Animal Shelter">Animal Shelter</option>
+      </select>
+    </label><br><br>
+
+    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">
+      Create Event
+    </button>
+  </form>
+{% endblock %}
